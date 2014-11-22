@@ -10,17 +10,24 @@ public abstract class Zombie
 	//4 will be the "boss" zombie
 	private int zombieTypeID;
 	private double zombieHealth;
+	private double zombieSpeed;
+	private boolean onGround;
 	
 	public static final int DEFAULT_ZOMBIE = 0;
-	public static final double DEFAULT_HEALTH = 1;
+	public static final double DEFAULT_HEALTH = 1.0;
+	public static final double DEFAULT_SPEED = 1.0;
 	
 	public Zombie()
 	{
 		zombieTypeID = DEFAULT_ZOMBIE;
 		zombieHealth = DEFAULT_HEALTH;
+		zombieSpeed = DEFAULT_SPEED;
+		onGround = false;
 	}
 	
 	public abstract void doZombieAbility();
+	
+	public void walkTowards(Object player);
 	
 	//setters and getters
 	public void setZombieTypeID(int newID)
