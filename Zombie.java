@@ -42,7 +42,7 @@ public abstract class Zombie
 	
 	public void setZombieHealth(int newHealth)
 	{
-		rzombieHealth = newHealth;
+		zombieHealth = newHealth;
 	}
 	
 	public double getZombieHealth()
