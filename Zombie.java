@@ -1,5 +1,7 @@
 //just some starting code for the zombie parent class
 
+import EntityClasses.Player;
+
 public abstract class Zombie
 {
 	//zombie ID will decide which type of zombie it is
@@ -27,7 +29,7 @@ public abstract class Zombie
 	
 	public abstract void doZombieAbility();
 	
-	public void walkTowards(Object player);
+	public abstract void walkTowards(Player p);
 	
 	//setters and getters
 	public void setZombieTypeID(int newID)
@@ -42,7 +44,7 @@ public abstract class Zombie
 	
 	public void setZombieHealth(int newHealth)
 	{
-		rzombieHealth = newHealth;
+		zombieHealth = newHealth;
 	}
 	
 	public double getZombieHealth()
