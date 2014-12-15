@@ -6,18 +6,18 @@ import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
 
 public class MainActivity extends Activity {
 
+	public static MainActivity  app ;
 	protected CCGLSurfaceView _glSurfaceView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		app = this;
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -33,10 +33,15 @@ public class MainActivity extends Activity {
 		CCDirector.sharedDirector().setDisplayFPS(true);  //display fps
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);  //set frame rate
 
-
 		CCScene scene = MainMenuLayer.scene(); //
 		CCDirector.sharedDirector().runWithScene(scene);
 
+	}
+	
+	@Override
+	public void onStart()
+	{
+		super.onStart();
 	}
 
 	@Override
