@@ -1,4 +1,4 @@
-package EntityClasses;
+package com.zombier;
 
 public class Player {
 	

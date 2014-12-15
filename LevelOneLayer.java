@@ -11,7 +11,6 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class LevelOneLayer extends CCLayer{

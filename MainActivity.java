@@ -5,19 +5,20 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-
+import org.cocos2d.sound.SoundEngine;
 
 public class MainActivity extends Activity {
 
-	public static MainActivity  app ;
+	private Context context;
 	protected CCGLSurfaceView _glSurfaceView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		app = this;
+		context = this;
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -41,12 +42,15 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStart()
 	{
-		super.onStart();
-	}
+		SoundEngine.sharedEngine().preloadSound(context, R.raw.main_menu_background_music);
+		SoundEngine.sharedEngine().playSound(context, R.raw.main_menu_background_music, true);
+        super.onStart();
+    }
 
 	@Override
 	public void onPause()
 	{
+		SoundEngine.sharedEngine().pauseSound();
 		super.onPause();
 		CCDirector.sharedDirector().pause();
 	}
@@ -54,6 +58,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume()
 	{
+		SoundEngine.sharedEngine().resumeSound();
 		super.onResume();
 		CCDirector.sharedDirector().resume();
 	}
@@ -61,6 +66,9 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStop()
 	{
+		SoundEngine.sharedEngine().realesAllEffects();
+        SoundEngine.sharedEngine().realesAllSounds();
+        SoundEngine.purgeSharedEngine();
 		super.onStop();
 		CCDirector.sharedDirector().end();
 	}

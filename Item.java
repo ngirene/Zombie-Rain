@@ -1,3 +1,5 @@
+package com.zombier;
+
 //just some starting code for the item parent class
 
 public abstract class Item

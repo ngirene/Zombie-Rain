@@ -1,6 +1,8 @@
+package com.zombier;
+
 //just some starting code for the zombie parent class
 
-import EntityClasses.Player;
+//import EntityClasses.Player;
 
 public abstract class Zombie
 {

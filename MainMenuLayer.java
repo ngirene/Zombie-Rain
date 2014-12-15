@@ -20,6 +20,7 @@ public class MainMenuLayer extends CCLayer{
 	CGPoint location;
 	
 	public MainMenuLayer() {
+		
 		screenSize = CCDirector.sharedDirector().winSize();
 		generalscalefactor  = CCDirector.sharedDirector().winSize().height / 500 ;
 		_targets = new ArrayList<CCSprite>();
@@ -32,13 +33,19 @@ public class MainMenuLayer extends CCLayer{
 		background.setPosition(CGPoint.ccp(0, screenSize.height));
 
 		CCSprite button_start = CCSprite.sprite("menu-new-game.png");
-		button_start.setPosition(CGPoint.ccp(screenSize.width - 100, 35));
+		button_start.setPosition(CGPoint.ccp(screenSize.width - 100*generalscalefactor, 100*generalscalefactor));
 
 		addChild(button_start);
 		_targets.add(button_start);
 		
+		CCSprite button_quit = CCSprite.sprite("you-lose.png");
+		button_quit.setPosition(CGPoint.ccp(screenSize.width - 100*generalscalefactor, 35*generalscalefactor));
+		
+		addChild(button_quit);
+		_targets.add(button_quit);
+		
 		CCSprite name = CCSprite.sprite("game-name.png");
-		name.setPosition(CGPoint.ccp(screenSize.width / 2, screenSize.height - 170));
+		name.setPosition(CGPoint.ccp(screenSize.width / 2 , screenSize.height /4* generalscalefactor));
 
 		addChild(name);
 		_targets.add(name);
@@ -54,6 +61,11 @@ public class MainMenuLayer extends CCLayer{
 			System.out.println("new game apertado");
 			CCScene scene = LevelOneLayer.scene(); //
 			CCDirector.sharedDirector().replaceScene(scene);
+		}
+		else if(CGRect.containsPoint((_targets.get(1).getBoundingBox()), location)){
+			System.out.println("quitting game");
+			CCDirector.sharedDirector().end();
+			android.os.Process.killProcess(android.os.Process.myPid());
 			
 		}
 
