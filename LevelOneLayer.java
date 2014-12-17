@@ -30,9 +30,13 @@ public class LevelOneLayer extends CCLayer{
 	private float previousSpawnTime;
 	private long systemTime;
 
+	private int numberOfZombies;
+
 	public LevelOneLayer () 
-{
-		//systemTime = System.currentTimeMillis();
+        {
+		numberOfZombies = 10;
+		
+		systemTime = System.currentTimeMillis();
 		previousSpawnTime = 0.0f;
 		
 		for (int i = 0; i < 10; i++)
@@ -40,15 +44,9 @@ public class LevelOneLayer extends CCLayer{
 			zombies.add(new NormalZombie());
 			
 			float newSpawnTime = previousSpawnTime + (zombies.get(0).randInt() % 5.0f);
-			zombies.get(0).setSpawnTime(previousSpawnTime);
+			zombies.get(i).setSpawnTime(previousSpawnTime);
 			previousSpawnTime = newSpawnTime;
-			CCTimer time = new CCTimer(zombies, "Spawn Zombie", systemTime/1000);
-			time.update(zombies.get(0).getSpawnTime());
 		}
-		
-		zombies.get(0).spawnZombie(zombies.get(0).randInt() % screenSize.width, screenSize.height);
-		addChild(zombies.get(0).getZombieSprite());
-		_targets.add(zombies.get(0).getZombieSprite());
 
 		
 		screenSize = CCDirector.sharedDirector().winSize();
@@ -123,8 +121,8 @@ public class LevelOneLayer extends CCLayer{
 		//_targets.add(hl);
 
 		addChild(background, -5);
-		
-		this.schedule("Spawn Zombie");
+		update();
+
 		moveZombie(zombie);
 	}
 	
@@ -134,6 +132,22 @@ public class LevelOneLayer extends CCLayer{
         zombieSprite.runAction(actionMove);
 		//CCAction actionTo = CCMoveTo.action(5.0f, CGPoint.make(sprite.getAnchorPoint().x, 0));
 		//sprite.runAction(actionTo);
+	}
+
+	public void update()
+	{
+		int nextZombie = 0;
+		
+		while(numberOfZombies < 0 && nextZombie <= 10)
+		{
+			if ((systemTime/1000) >= zombies.get(nextZombie).getSpawnTime())
+			{
+				zombies.get(nextZombie).spawnZombie(zombies.get(0).randInt() % screenSize.width, screenSize.height);
+				addChild(zombies.get(nextZombie).getZombieSprite());
+				_targets.add(zombies.get(nextZombie).getZombieSprite());
+			}
+			nextZombie++;
+		}
 	}
 
 	@Override
