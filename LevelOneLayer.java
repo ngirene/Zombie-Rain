@@ -1,7 +1,8 @@
-package com.zombier;
+package cs113.owl.zombie.rain;
 
 import java.util.ArrayList;
 
+import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -11,6 +12,8 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 
+import EntityClasses.Player;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 public class LevelOneLayer extends CCLayer{
@@ -20,6 +23,8 @@ public class LevelOneLayer extends CCLayer{
 	protected ArrayList<CCSprite> _targets;
 	CGPoint location;
 	private float cordx, cordy;
+	private Player p;
+	private ArrayList<Zombie> zombies;
 
 
 	public LevelOneLayer () {
@@ -45,6 +50,9 @@ public class LevelOneLayer extends CCLayer{
 		
 		CCSprite srl = CCSprite.sprite("srl.png");
 		CCSprite std = CCSprite.sprite("std.png");
+		
+		CCSprite zombie = CCSprite.sprite("zombie.png");
+		zombie.setPosition((float) (Math.random() % (screenSize.width)), screenSize.height);
 		
 		srl.setPosition(CGPoint.ccp(-100, -100));
 		std.setPosition(CGPoint.ccp(-100, -100));
@@ -73,6 +81,9 @@ public class LevelOneLayer extends CCLayer{
 		addChild(std);
 		_targets.add(std);
 		
+		addChild(zombie);
+		_targets.add(zombie);
+		
 		//5
 		//addChild(vt);
 		//_targets.add(vt);
@@ -82,7 +93,17 @@ public class LevelOneLayer extends CCLayer{
 		//_targets.add(hl);
 
 		addChild(background, -5);
-
+		
+		
+		moveZombie(zombie);
+	}
+	
+	public void moveZombie(CCSprite zombieSprite)
+	{
+		CCMoveTo actionMove = CCMoveTo.action(10, CGPoint.ccp(zombieSprite.getPosition().x, 0));
+        zombieSprite.runAction(actionMove);
+		//CCAction actionTo = CCMoveTo.action(5.0f, CGPoint.make(sprite.getAnchorPoint().x, 0));
+		//sprite.runAction(actionTo);
 	}
 
 	@Override
