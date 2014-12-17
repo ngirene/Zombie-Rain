@@ -1,8 +1,11 @@
-package com.zombier;
+package cs113.owl.zombie.rain;
 
-//just some starting code for the zombie parent class
+import java.util.Random;
 
-//import EntityClasses.Player;
+import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.types.CGSize;
+
+import EntityClasses.Player;
 
 public abstract class Zombie
 {
@@ -16,10 +19,13 @@ public abstract class Zombie
 	private double zombieHealth;
 	private double zombieSpeed;
 	private boolean onGround;
+	private float spawnTime;
 	
 	public static final int DEFAULT_ZOMBIE = 0;
 	public static final double DEFAULT_HEALTH = 1.0;
 	public static final double DEFAULT_SPEED = 1.0;
+	
+	CCSprite zombie;
 	
 	public Zombie()
 	{
@@ -27,6 +33,19 @@ public abstract class Zombie
 		zombieHealth = DEFAULT_HEALTH;
 		zombieSpeed = DEFAULT_SPEED;
 		onGround = false;
+	}
+	
+	public int randInt() 
+	{
+	    Random rand = new Random();
+	    int random = rand.nextInt();
+	    return random;
+	}
+	
+	public void spawnZombie(float xPos, float yPos)
+	{
+		zombie = CCSprite.sprite("zombie.png");
+		zombie.setPosition(xPos, yPos);
 	}
 	
 	public abstract void doZombieAbility();
@@ -49,8 +68,23 @@ public abstract class Zombie
 		zombieHealth = newHealth;
 	}
 	
+	public void setSpawnTime(float newSpawnTime)
+	{
+		spawnTime = newSpawnTime;
+	}
+	
 	public double getZombieHealth()
 	{
 		return zombieHealth;
+	}
+	
+	public CCSprite getZombieSprite()
+	{
+		return zombie;
+	}
+	
+	public float getSpawnTime()
+	{
+		return spawnTime;
 	}
 }
