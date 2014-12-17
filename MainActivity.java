@@ -5,7 +5,6 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,12 +12,10 @@ import org.cocos2d.sound.SoundEngine;
 
 public class MainActivity extends Activity {
 
-	private Context context;
 	protected CCGLSurfaceView _glSurfaceView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		context = this;
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -42,8 +39,8 @@ public class MainActivity extends Activity {
 	@Override
 	public void onStart()
 	{
-		SoundEngine.sharedEngine().preloadSound(context, R.raw.main_menu_background_music);
-		SoundEngine.sharedEngine().playSound(context, R.raw.main_menu_background_music, true);
+		SoundEngine.sharedEngine().preloadSound(CCDirector.sharedDirector().getActivity(), R.raw.main_menu_background_music);
+		SoundEngine.sharedEngine().playSound(CCDirector.sharedDirector().getActivity(), R.raw.main_menu_background_music, true);
         super.onStart();
     }
 
@@ -60,6 +57,7 @@ public class MainActivity extends Activity {
 	{
 		SoundEngine.sharedEngine().resumeSound();
 		super.onResume();
+		
 		CCDirector.sharedDirector().resume();
 	}
 

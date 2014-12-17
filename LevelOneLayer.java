@@ -7,6 +7,7 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
@@ -18,14 +19,17 @@ public class LevelOneLayer extends CCLayer{
 	private static CGSize screenSize;
 	private float generalscalefactor;
 	protected ArrayList<CCSprite> _targets;
+	protected ArrayList<CCSprite> _zombies;
 	CGPoint location;
 	private float cordx, cordy;
-
-
+	
 	public LevelOneLayer () {
+		
 		screenSize = CCDirector.sharedDirector().winSize();
 		generalscalefactor  = CCDirector.sharedDirector().winSize().height / 500 ;
 		_targets = new ArrayList<CCSprite>();
+		_zombies = new ArrayList<CCSprite>();
+		SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.gunshot);
 
 		this.setIsTouchEnabled(true);
 
@@ -38,10 +42,10 @@ public class LevelOneLayer extends CCLayer{
 		_player.setPosition(CGPoint.ccp(screenSize.width / 2, 50));
 
 		CCSprite button_left = CCSprite.sprite("left.png");
-		button_left.setPosition(CGPoint.ccp(25, 25));
+		button_left.setPosition(CGPoint.ccp(25*generalscalefactor, 25*generalscalefactor));
 
 		CCSprite button_right = CCSprite.sprite("right.png");
-		button_right.setPosition(CGPoint.ccp(screenSize.width - 25, 25));
+		button_right.setPosition(CGPoint.ccp(screenSize.width - 25*generalscalefactor, 25*generalscalefactor));
 		
 		CCSprite srl = CCSprite.sprite("srl.png");
 		CCSprite std = CCSprite.sprite("std.png");
@@ -49,6 +53,8 @@ public class LevelOneLayer extends CCLayer{
 		srl.setPosition(CGPoint.ccp(-100, -100));
 		std.setPosition(CGPoint.ccp(-100, -100));
 		
+		CCSprite pause = CCSprite.sprite("pause.png");
+		pause.setPosition(CGPoint.ccp(screenSize.width - 100*generalscalefactor, 25*generalscalefactor));
 		
 		//CCSprite vd = CCSprite.sprite("vd.png");
 		//CCSprite vt = CCSprite.sprite("vt.png");
@@ -74,6 +80,10 @@ public class LevelOneLayer extends CCLayer{
 		_targets.add(std);
 		
 		//5
+		addChild(pause);
+		_targets.add(pause);
+		
+		//5
 		//addChild(vt);
 		//_targets.add(vt);
 		
@@ -88,7 +98,6 @@ public class LevelOneLayer extends CCLayer{
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event){
 		
-		
 		location = CCDirector.sharedDirector().convertToGL(CGPoint.ccp(event.getX(), event.getY()));
 		cordx = location.x;
 		cordy = location.y;
@@ -99,7 +108,7 @@ public class LevelOneLayer extends CCLayer{
 				System.out.println("Stop_esquerdo_walk");
 			}
 			else{
-				CCMoveTo move_left = CCMoveTo.action(0.5f, CGPoint.ccp(_targets.get(0).getPosition().x - 20, 50));
+				CCMoveTo move_left = CCMoveTo.action(0.5f, CGPoint.ccp(_targets.get(0).getPosition().x - 50, 50));
 				_targets.get(0).runAction(move_left);
 				System.out.println("esquerdo_walk");
 			}
@@ -110,10 +119,16 @@ public class LevelOneLayer extends CCLayer{
 				System.out.println("Stop_Direita_walk");
 			}
 			else{
-				CCMoveTo move_right = CCMoveTo.action(0.5f, CGPoint.ccp(_targets.get(0).getPosition().x + 20, 50));
+				CCMoveTo move_right = CCMoveTo.action(0.5f, CGPoint.ccp(_targets.get(0).getPosition().x + 50, 50));
 				_targets.get(0).runAction(move_right);
 				System.out.println("direita_walk");
 			}
+		}
+		else if(CGRect.containsPoint((_targets.get(5).getBoundingBox()), location)){
+			System.out.println("launch pause menu");
+			CCScene scene = PauseMenuLayer.scene(); //
+			CCDirector.sharedDirector().pushScene(LevelOneLayer.scene());
+			CCDirector.sharedDirector().replaceScene(scene);
 		}
 		else{
 			//_targets.get(3).setVisible(true);
@@ -132,6 +147,8 @@ public class LevelOneLayer extends CCLayer{
 			//4
 			addChild(std);
 			_targets.set(4, std);
+			
+			SoundEngine.sharedEngine().playEffect(CCDirector.sharedDirector().getActivity(), R.raw.gunshot);
 			
 		}
 
@@ -201,6 +218,5 @@ public class LevelOneLayer extends CCLayer{
 		scene.addChild(layer);
 		return scene;
 	}
-
 
 }
