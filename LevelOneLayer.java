@@ -1,4 +1,4 @@
-package cs113.owl.zombie.rain;
+package com.zombier;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,6 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
 
-import EntityClasses.Player;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -22,23 +21,16 @@ public class LevelOneLayer extends CCLayer{
 	private static CGSize screenSize;
 	private float generalscalefactor;
 	protected ArrayList<CCSprite> _targets;
-	protected ArrayList<CCSprite> _zombies;
 	CGPoint location;
 	private float cordx, cordy;
-<<<<<<< HEAD
-	
-=======
 	private Player p;
 	private ArrayList<Zombie> zombies;
 
-
->>>>>>> ff99d6dc46f61ed23ccf8e5e80b87a34e77ba7c4
 	public LevelOneLayer () {
 		
 		screenSize = CCDirector.sharedDirector().winSize();
 		generalscalefactor  = CCDirector.sharedDirector().winSize().height / 500 ;
 		_targets = new ArrayList<CCSprite>();
-		_zombies = new ArrayList<CCSprite>();
 		SoundEngine.sharedEngine().preloadEffect(CCDirector.sharedDirector().getActivity(), R.raw.gunshot);
 
 		this.setIsTouchEnabled(true);
