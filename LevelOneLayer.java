@@ -1,11 +1,8 @@
 package com.zombier;
 
 import java.util.ArrayList;
-import java.util.Timer;
 
 import org.cocos2d.actions.CCScheduler;
-import org.cocos2d.actions.CCTimer;
-import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -14,13 +11,10 @@ import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
-import org.cocos2d.utils.javolution.MathLib;
 
 import EntityClasses.Player;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import java.util.Date;
 
 public class LevelOneLayer extends CCLayer
 {
@@ -34,19 +28,17 @@ public class LevelOneLayer extends CCLayer
 	private ArrayList<Zombie> zombies;
 	CCScheduler curTime;
 	
-	private Date date;
 	private float previousSpawnTime;
-	private float beginSystemTime;
+	private long beginSystemTime;
+	private long elapsedTime;
 	
 	private int numberOfZombies;
 
 	public LevelOneLayer () 
-        {
+	{
 		numberOfZombies = 10;
 		
-		date = new Date();
-		beginSystemTime = date.getTime();
-		previousSpawnTime = 0.0f;
+		previousSpawnTime = 0;
 		
 		zombies = new ArrayList<Zombie>();
 		
@@ -133,6 +125,10 @@ public class LevelOneLayer extends CCLayer
 
 		addChild(background, -5);
 
+		beginSystemTime = System.nanoTime();
+		Log.wtf("Begin Time", "Got beginning time");
+		
+		this.schedule("calculateElapsedTime", 0.5f);
 		this.schedule("checkZombieSpawn", 1.0f);
 	}
 	
@@ -146,9 +142,6 @@ public class LevelOneLayer extends CCLayer
 
 	public void checkZombieSpawn(float dt)
 	{
-		float currentSystemTime = date.getTime();
-		
-		float elapsedTime = (currentSystemTime - beginSystemTime) / 1000;
 		Log.wtf("Elapsed Time", "Elapsed time is " + elapsedTime + "s");
 		//Log.wtf("Check", "Checking Zombie Spawn . . .");
 		for (int i = 0; i < numberOfZombies; i++)
@@ -163,6 +156,16 @@ public class LevelOneLayer extends CCLayer
 				moveZombie(zombies.get(i).getZombieSprite());	
 			}
 		}
+	}
+
+	public void calculateElapsedTime(float dt)
+	{
+		long currentSystemTime = System.nanoTime();
+		
+		Log.wtf("Current Time", "Current Time is " + currentSystemTime);
+		Log.wtf("Begin System Time", "Beginning Time is " + beginSystemTime);
+		
+		elapsedTime = ((currentSystemTime - beginSystemTime) / 10000000) / 100;
 	}
 
 	@Override
