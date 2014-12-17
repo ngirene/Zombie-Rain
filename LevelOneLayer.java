@@ -25,8 +25,31 @@ public class LevelOneLayer extends CCLayer{
 	private float cordx, cordy;
 	private Player p;
 	private ArrayList<Zombie> zombies;
+	CCScheduler curTime;
+	private Timer timer;
+	private float previousSpawnTime;
+	private long systemTime;
 
-	public LevelOneLayer () {
+	public LevelOneLayer () 
+{
+		//systemTime = System.currentTimeMillis();
+		previousSpawnTime = 0.0f;
+		
+		for (int i = 0; i < 10; i++)
+		{
+			zombies.add(new NormalZombie());
+			
+			float newSpawnTime = previousSpawnTime + (zombies.get(0).randInt() % 5.0f);
+			zombies.get(0).setSpawnTime(previousSpawnTime);
+			previousSpawnTime = newSpawnTime;
+			CCTimer time = new CCTimer(zombies, "Spawn Zombie", systemTime/1000);
+			time.update(zombies.get(0).getSpawnTime());
+		}
+		
+		zombies.get(0).spawnZombie(zombies.get(0).randInt() % screenSize.width, screenSize.height);
+		addChild(zombies.get(0).getZombieSprite());
+		_targets.add(zombies.get(0).getZombieSprite());
+
 		
 		screenSize = CCDirector.sharedDirector().winSize();
 		generalscalefactor  = CCDirector.sharedDirector().winSize().height / 500 ;
@@ -101,7 +124,7 @@ public class LevelOneLayer extends CCLayer{
 
 		addChild(background, -5);
 		
-		
+		this.schedule("Spawn Zombie");
 		moveZombie(zombie);
 	}
 	
