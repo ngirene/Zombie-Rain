@@ -36,7 +36,7 @@ public class LevelOneLayer extends CCLayer
 
 	public LevelOneLayer () 
 	{
-		numberOfZombies = 10;
+		numberOfZombies = 30;
 		
 		previousSpawnTime = 0;
 		
