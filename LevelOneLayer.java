@@ -46,7 +46,7 @@ public class LevelOneLayer extends CCLayer
 		{
 			zombies.add(new NormalZombie());
 
-			float newSpawnTime = Math.abs(previousSpawnTime + (zombies.get(i).randInt() % 10.0f) + 1.0f);
+			float newSpawnTime = Math.abs(previousSpawnTime + (zombies.get(i).randInt() % 10.0f) + 2.0f);
 			zombies.get(i).setSpawnTime(Math.abs(previousSpawnTime));
 			Log.wtf("Spawn Time", "Spawn time set to " + Math.abs(previousSpawnTime));
 			previousSpawnTime = newSpawnTime;
@@ -130,6 +130,7 @@ public class LevelOneLayer extends CCLayer
 		
 		this.schedule("calculateElapsedTime", 0.5f);
 		this.schedule("checkZombieSpawn", 1.0f);
+		this.schedule("walkTowardsPlayer");
 	}
 	
 	public void moveZombie(CCSprite zombieSprite)
@@ -138,6 +139,12 @@ public class LevelOneLayer extends CCLayer
         zombieSprite.runAction(actionMove);
 		//CCAction actionTo = CCMoveTo.action(5.0f, CGPoint.make(sprite.getAnchorPoint().x, 0));
 		//sprite.runAction(actionTo);
+	}
+
+	public void goToPlayer(CCSprite zombieSprite)
+	{
+		CCMoveTo actionMove = CCMoveTo.action(5, CGPoint.ccp(screenSize.width/2, 50));
+		zombieSprite.runAction(actionMove);
 	}
 
 	public void checkZombieSpawn(float dt)
@@ -166,6 +173,17 @@ public class LevelOneLayer extends CCLayer
 		Log.wtf("Begin System Time", "Beginning Time is " + beginSystemTime);
 		
 		elapsedTime = ((currentSystemTime - beginSystemTime) / 10000000) / 100;
+	}
+
+	public void walkTowardsPLayer(float dt)
+	{
+		for (int i = 0; i < numberOfZombies; i++)
+		{
+			if(zombies.get(i).getOnGround() == true)
+			{
+				goToPlayer(zombies.get(i).getZombieSprite());
+			}
+		}
 	}
 
 	@Override
