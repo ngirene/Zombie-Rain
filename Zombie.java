@@ -20,6 +20,7 @@ public abstract class Zombie
 	private double zombieSpeed;
 	private boolean onGround;
 	private float spawnTime;
+	private boolean spawned;
 	
 	public static final int DEFAULT_ZOMBIE = 0;
 	public static final double DEFAULT_HEALTH = 1.0;
@@ -33,6 +34,8 @@ public abstract class Zombie
 		zombieHealth = DEFAULT_HEALTH;
 		zombieSpeed = DEFAULT_SPEED;
 		onGround = false;
+		spawned = false;
+		zombie = CCSprite.sprite("zombie.png");
 	}
 	
 	public int randInt() 
@@ -44,7 +47,6 @@ public abstract class Zombie
 	
 	public void spawnZombie(float xPos, float yPos)
 	{
-		zombie = CCSprite.sprite("zombie.png");
 		zombie.setPosition(xPos, yPos);
 	}
 	
@@ -73,6 +75,16 @@ public abstract class Zombie
 		spawnTime = newSpawnTime;
 	}
 	
+	public void setSpawned(boolean value)
+	{
+		spawned = value;
+	}
+	
+	public void setOnGround(boolean value)
+	{
+		onGround = value;
+	}
+	
 	public double getZombieHealth()
 	{
 		return zombieHealth;
@@ -83,8 +95,18 @@ public abstract class Zombie
 		return zombie;
 	}
 	
+	public boolean getSpawned()
+	{
+		return spawned;
+	}
+	
 	public float getSpawnTime()
 	{
 		return spawnTime;
+	}
+	
+	public boolean getOnGround()
+	{
+		return onGround;
 	}
 }
