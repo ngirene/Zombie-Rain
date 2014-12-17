@@ -1,22 +1,29 @@
 package com.zombier;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
+import org.cocos2d.actions.CCScheduler;
+import org.cocos2d.actions.CCTimer;
 import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCSprite;
-import org.cocos2d.sound.SoundEngine;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 import org.cocos2d.types.CGSize;
+import org.cocos2d.utils.javolution.MathLib;
 
+import EntityClasses.Player;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import java.util.Date;
 
-public class LevelOneLayer extends CCLayer{
+public class LevelOneLayer extends CCLayer
+{
 
 	private static CGSize screenSize;
 	private float generalscalefactor;
@@ -26,28 +33,32 @@ public class LevelOneLayer extends CCLayer{
 	private Player p;
 	private ArrayList<Zombie> zombies;
 	CCScheduler curTime;
-	private Timer timer;
+	
+	private Date date;
 	private float previousSpawnTime;
-	private long systemTime;
-
+	private float beginSystemTime;
+	
 	private int numberOfZombies;
 
 	public LevelOneLayer () 
         {
 		numberOfZombies = 10;
 		
-		systemTime = System.currentTimeMillis();
+		date = new Date();
+		beginSystemTime = date.getTime();
 		previousSpawnTime = 0.0f;
 		
-		for (int i = 0; i < 10; i++)
+		zombies = new ArrayList<Zombie>();
+		
+		for (int i = 0; i < numberOfZombies; i++)
 		{
 			zombies.add(new NormalZombie());
-			
-			float newSpawnTime = previousSpawnTime + (zombies.get(0).randInt() % 5.0f);
-			zombies.get(i).setSpawnTime(previousSpawnTime);
+
+			float newSpawnTime = Math.abs(previousSpawnTime + (zombies.get(i).randInt() % 10.0f) + 1.0f);
+			zombies.get(i).setSpawnTime(Math.abs(previousSpawnTime));
+			Log.wtf("Spawn Time", "Spawn time set to " + Math.abs(previousSpawnTime));
 			previousSpawnTime = newSpawnTime;
 		}
-
 		
 		screenSize = CCDirector.sharedDirector().winSize();
 		generalscalefactor  = CCDirector.sharedDirector().winSize().height / 500 ;
@@ -121,9 +132,8 @@ public class LevelOneLayer extends CCLayer{
 		//_targets.add(hl);
 
 		addChild(background, -5);
-		update();
 
-		moveZombie(zombie);
+		this.schedule("checkZombieSpawn", 1.0f);
 	}
 	
 	public void moveZombie(CCSprite zombieSprite)
@@ -134,19 +144,24 @@ public class LevelOneLayer extends CCLayer{
 		//sprite.runAction(actionTo);
 	}
 
-	public void update()
+	public void checkZombieSpawn(float dt)
 	{
-		int nextZombie = 0;
+		float currentSystemTime = date.getTime();
 		
-		while(numberOfZombies < 0 && nextZombie <= 10)
+		float elapsedTime = (currentSystemTime - beginSystemTime) / 1000;
+		Log.wtf("Elapsed Time", "Elapsed time is " + elapsedTime + "s");
+		//Log.wtf("Check", "Checking Zombie Spawn . . .");
+		for (int i = 0; i < numberOfZombies; i++)
 		{
-			if ((systemTime/1000) >= zombies.get(nextZombie).getSpawnTime())
+			if ((elapsedTime >= zombies.get(i).getSpawnTime()) && (zombies.get(i).getSpawned() == false))
 			{
-				zombies.get(nextZombie).spawnZombie(zombies.get(0).randInt() % screenSize.width, screenSize.height);
-				addChild(zombies.get(nextZombie).getZombieSprite());
-				_targets.add(zombies.get(nextZombie).getZombieSprite());
+				zombies.get(i).setSpawned(true);
+				zombies.get(i).spawnZombie(zombies.get(i).randInt() % screenSize.width, screenSize.height);
+				addChild(zombies.get(i).getZombieSprite());
+				_targets.add(zombies.get(i).getZombieSprite());
+				
+				moveZombie(zombies.get(i).getZombieSprite());	
 			}
-			nextZombie++;
 		}
 	}
 
