@@ -1,12 +1,22 @@
-//just some starting code for the "normal" zombie  to use for the first level
-//
-//should be mostly empty since it already gets functions and fields from extending 
-//from the parent Zombie class and the "normal" zombie does not do anything special
+package cs113.owl.zombie.rain;
+
+import EntityClasses.Player;
 
 public class NormalZombie extends Zombie
 {
-	public Zombie()
-	{
 
+	@Override
+	public void doZombieAbility() 
+	{
+		// TODO Auto-generated method stub
+		
 	}
+
+	@Override
+	public void walkTowards(Player p) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }
