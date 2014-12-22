@@ -47,7 +47,6 @@ public class LevelOneLayer extends CCLayer
 		for (int i = 0; i < numberOfZombies; i++)
 		{
 			zombies.add(new NormalZombie());
-
 			float newSpawnTime = Math.abs(previousSpawnTime + (MathLib.random(1,5)));
 			zombies.get(i).setSpawnTime(Math.abs(previousSpawnTime));
 			Log.wtf("Spawn Time", "Spawn time set to " + Math.abs(previousSpawnTime));
@@ -178,7 +177,7 @@ public class LevelOneLayer extends CCLayer
 		zombies.get(z).getZombieSprite().removeFromParentAndCleanup(true);
 		zombies.remove(z);
 	}
-	
+
 	public void checkZombieSpawn(float dt)
 	{
 		//Log.wtf("Check", "Checking Zombie Spawn . . .");
@@ -202,6 +201,17 @@ public class LevelOneLayer extends CCLayer
 		long currentSystemTime = System.nanoTime();
 		
 		elapsedTime = ((currentSystemTime - beginSystemTime) / 10000000) / 100;
+	}
+
+	public void walkTowardsPLayer(float dt)
+	{
+		for (int i = 0; i < numberOfZombies; i++)
+		{
+			if(zombies.get(i).getOnGround() == true)
+			{
+				goToPlayer(zombies.get(i).getZombieSprite());
+			}
+		}
 	}
 
 	@Override
