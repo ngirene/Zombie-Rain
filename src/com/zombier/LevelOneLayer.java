@@ -203,17 +203,6 @@ public class LevelOneLayer extends CCLayer
 		elapsedTime = ((currentSystemTime - beginSystemTime) / 10000000) / 100;
 	}
 
-	public void walkTowardsPLayer(float dt)
-	{
-		for (int i = 0; i < numberOfZombies; i++)
-		{
-			if(zombies.get(i).getOnGround() == true)
-			{
-				goToPlayer(zombies.get(i).getZombieSprite());
-			}
-		}
-	}
-
 	@Override
 	public boolean ccTouchesBegan(MotionEvent event){
 		
